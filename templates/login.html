@@ -1,32 +1,74 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>Авторизация</h1>
-<form action="" method="post">
-    {{ form.hidden_tag() }}
-    {{ form.csrf_token }}
-    {% if message %}
-    <div class="alert alert-danger" role="alert">{{ message }}</div>
-    {% endif %}
-    <p>
-        {{ form.email.label }}<br>
-        {{ form.email(class="form-control", type="email") }}<br>
-        {% for error in form.email.errors %}
-    <div class="alert alert-danger" role="alert">
-        {{ error }}
+<div class="auth-container">
+    <div class="auth-card">
+        <div class="auth-header">
+            <h1 class="auth-title">Вход в систему</h1>
+            <p class="auth-subtitle">Пожалуйста, введите ваши данные</p>
+        </div>
+        
+        <form action="" method="post" class="auth-form">
+            {{ form.hidden_tag() }}
+            {{ form.csrf_token }}
+            
+            {% if message %}
+            <div class="auth-alert">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                    <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+                </svg>
+                <span>{{ message }}</span>
+            </div>
+            {% endif %}
+            
+            <div class="form-group">
+                <label for="email" class="form-label">Email</label>
+                <div class="input-wrapper">
+                    <svg class="input-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                        <path d="M.05 3.555A2 2 0 0 1 2 2h12a2 2 0 0 1 1.95 1.555L8 8.414.05 3.555ZM0 4.697v7.104l5.803-3.558L0 4.697ZM6.761 8.83l-6.57 4.027A2 2 0 0 0 2 14h12a2 2 0 0 0 1.808-1.144l-6.57-4.027L8 9.586l-1.239-.757Zm3.436-.586L16 11.801V4.697l-5.803 3.546Z"/>
+                    </svg>
+                    {{ form.email(class="form-input", type="email", placeholder="example@mail.com", id="email") }}
+                </div>
+                {% for error in form.email.errors %}
+                <div class="error-message">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" viewBox="0 0 16 16">
+                        <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+                    </svg>
+                    <span>{{ error }}</span>
+                </div>
+                {% endfor %}
+            </div>
+            
+            <div class="form-group">
+                <label for="password" class="form-label">Пароль</label>
+                <div class="input-wrapper">
+                    <svg class="input-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                        <path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/>
+                    </svg>
+                    {{ form.password(class="form-input", type="password", placeholder="Введите пароль", id="password") }}
+                </div>
+                {% for error in form.password.errors %}
+                <div class="error-message">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" viewBox="0 0 16 16">
+                        <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+                    </svg>
+                    <span>{{ error }}</span>
+                </div>
+                {% endfor %}
+            </div>
+            
+            <div class="remember-me">
+                {{ form.remember_me(id="remember") }}
+                <label for="remember" class="remember-label">{{ form.remember_me.label }}</label>
+            </div>
+            
+            {{ form.submit(type="submit", class="submit-btn") }}
+            
+            <div class="auth-footer">
+                <a href="{{ url_for('register') }}" class="auth-link">Нет аккаунта? Зарегистрируйтесь</a>
+                <a href="{{ url_for('reset_password_request') }}" class="auth-link">Забыли пароль?</a>
+            </div>
+        </form>
     </div>
-    {% endfor %}
-    </p>
-    <p>
-        {{ form.password.label }}<br>
-        {{ form.password(class="form-control", type="password") }}<br>
-        {% for error in form.password.errors %}
-    <div class="alert alert-danger" role="alert">
-        {{ error }}
-    </div>
-    {% endfor %}
-    </p>
-    <p>{{ form.remember_me() }} {{ form.remember_me.label }}</p>
-    <p>{{ form.submit(type="submit", class="btn btn-primary") }}</p>
-</form>
+</div>
 {% endblock %}
