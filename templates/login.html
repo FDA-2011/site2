@@ -1,163 +1,32 @@
 {% extends "base.html" %}
 
 {% block content %}
-<style>
-    /* Основные стили */
-    .login-container {
-        max-width: 400px;
-        margin: 50px auto;
-        padding: 30px;
-        border-radius: 10px;
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        background: white;
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
-    
-    .login-title {
-        text-align: center;
-        color: #2c3e50;
-        margin-bottom: 25px;
-        font-size: 28px;
-        font-weight: 600;
-    }
-    
-    .login-form {
-        display: flex;
-        flex-direction: column;
-        gap: 20px;
-    }
-    
-    .form-group {
-        margin-bottom: 15px;
-    }
-    
-    .form-group label {
-        display: block;
-        margin-bottom: 8px;
-        font-weight: 500;
-        color: #34495e;
-    }
-    
-    .form-control {
-        width: 100%;
-        padding: 12px 15px;
-        border: 1px solid #ddd;
-        border-radius: 6px;
-        font-size: 16px;
-        transition: all 0.3s;
-        background-color: #f9f9f9;
-    }
-    
-    .form-control:focus {
-        border-color: #3498db;
-        box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
-        outline: none;
-        background-color: white;
-    }
-    
-    .alert-danger {
-        padding: 10px 15px;
-        background-color: #fdecea;
-        color: #e74c3c;
-        border-radius: 6px;
-        margin-top: 5px;
-        font-size: 14px;
-        border-left: 3px solid #e74c3c;
-    }
-    
-    .remember-me {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        margin: 15px 0;
-    }
-    
-    .remember-me input {
-        width: 16px;
-        height: 16px;
-    }
-    
-    .btn-primary {
-        background-color: #3498db;
-        color: white;
-        border: none;
-        padding: 12px;
-        border-radius: 6px;
-        font-size: 16px;
-        font-weight: 500;
-        cursor: pointer;
-        transition: background-color 0.3s;
-    }
-    
-    .btn-primary:hover {
-        background-color: #2980b9;
-    }
-    
-    .login-footer {
-        text-align: center;
-        margin-top: 20px;
-        color: #7f8c8d;
-    }
-    
-    .login-footer a {
-        color: #3498db;
-        text-decoration: none;
-    }
-    
-    .login-footer a:hover {
-        text-decoration: underline;
-    }
-    
-    @media (max-width: 480px) {
-        .login-container {
-            margin: 20px auto;
-            padding: 20px;
-        }
-    }
-</style>
-
-<div class="login-container">
-    <h1 class="login-title">Авторизация</h1>
-    
-    <form action="" method="post" class="login-form">
-        {{ form.hidden_tag() }}
-        {{ form.csrf_token }}
-        
-        {% if message %}
-        <div class="alert alert-danger" role="alert">{{ message }}</div>
-        {% endif %}
-        
-        <div class="form-group">
-            {{ form.email.label }}
-            {{ form.email(class="form-control", type="email", placeholder="Введите ваш email") }}
-            {% for error in form.email.errors %}
-            <div class="alert alert-danger" role="alert">
-                {{ error }}
-            </div>
-            {% endfor %}
-        </div>
-        
-        <div class="form-group">
-            {{ form.password.label }}
-            {{ form.password(class="form-control", type="password", placeholder="Введите пароль") }}
-            {% for error in form.password.errors %}
-            <div class="alert alert-danger" role="alert">
-                {{ error }}
-            </div>
-            {% endfor %}
-        </div>
-        
-        <div class="remember-me">
-            {{ form.remember_me() }}
-            {{ form.remember_me.label }}
-        </div>
-        
-        {{ form.submit(type="submit", class="btn btn-primary") }}
-    </form>
-    
-    <div class="login-footer">
-        Нет аккаунта? <a href="{{ url_for('register') }}">Зарегистрируйтесь</a> | 
-        <a href="{{ url_for('reset_password_request') }}">Забыли пароль?</a>
+<h1>Авторизация</h1>
+<form action="" method="post">
+    {{ form.hidden_tag() }}
+    {{ form.csrf_token }}
+    {% if message %}
+    <div class="alert alert-danger" role="alert">{{ message }}</div>
+    {% endif %}
+    <p>
+        {{ form.email.label }}<br>
+        {{ form.email(class="form-control", type="email") }}<br>
+        {% for error in form.email.errors %}
+    <div class="alert alert-danger" role="alert">
+        {{ error }}
     </div>
-</div>
+    {% endfor %}
+    </p>
+    <p>
+        {{ form.password.label }}<br>
+        {{ form.password(class="form-control", type="password") }}<br>
+        {% for error in form.password.errors %}
+    <div class="alert alert-danger" role="alert">
+        {{ error }}
+    </div>
+    {% endfor %}
+    </p>
+    <p>{{ form.remember_me() }} {{ form.remember_me.label }}</p>
+    <p>{{ form.submit(type="submit", class="btn btn-primary") }}</p>
+</form>
 {% endblock %}
