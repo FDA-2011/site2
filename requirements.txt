@@ -1,0 +1,9 @@
+SQLAlchemy
+Werkzeug
+Flask
+WTForms
+requests
+flask_login
+flask_restful
+sqlalchemy_serializer
+flask_wtf
