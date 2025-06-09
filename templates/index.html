@@ -1,8 +1,21 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h2>Список игр</h2>
-{% if current_user.is_authenticated %}
-<a href="/playgame1" class="btn btn-secondary">Игра Пирамидка</a>
-{% endif %}
+<div class="main-content">
+    <div class="registration-card">
+        <h2 class="registration-title">Список игр</h2>
+        
+        {% if current_user.is_authenticated %}
+        <div style="text-align: center; margin-top: 20px;">
+            <a href="/playgame1" class="btn btn-primary" style="display: inline-block; padding: 12px 24px; font-size: 16px;">
+                Игра Пирамидка
+            </a>
+        </div>
+        {% else %}
+        <div class="login-link" style="margin-top: 30px;">
+            <p>Для доступа к играм необходимо <a href="/login">войти</a></p>
+        </div>
+        {% endif %}
+    </div>
+</div>
 {% endblock %}
