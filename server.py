@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect
+gfrom flask import Flask, render_template, redirect
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 
 from data import db_session
@@ -47,9 +47,9 @@ def index():
     return render_template("index.html")
 
 
-@app.route("/playgame1")
+@app.route("/indexgame1")
 def play():
-    return render_template("playgame.html")
+    return render_template("indexgame.html")
 
 
 @app.route('/register', methods=['GET', 'POST'])
