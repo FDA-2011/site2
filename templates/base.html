@@ -2,35 +2,30 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-          rel="stylesheet"
-          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
-          crossorigin="anonymous">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" href="../static/css/style.css"/>
-    <link rel="shortcut icon" href="img/photo_5344024942678766811_x.png
-" type="image/png">
+    <link rel="shortcut icon" href="img/photo_5344024942678766811_x.png" type="image/png">
     <link type="image/x-icon" rel="shortcut icon" href="favicon.ico">
     <title>JoyBox</title>
 </head>
 <body>
-<header>
-    <nav class="navbar navbar-light bg-light">
-        <h1>JoyBox-сервис с браузерными играми</h1>
-        {% if current_user.is_authenticated %}
-        <a class="navbar-brand" href="/logout">{{ current_user.name }} {{ current_user.surname }}</a>
-        {% else %}
-        <p>
-            <a class="btn btn-primary " href="/register">Зарегистрироваться</a>
-            <a class="btn btn-success" href="/login">Войти</a>
-        </p>
-        {% endif %}
-    </nav>
-    <h4>Авторизуйся для старта игр</h4>
-</header>
-<!-- Begin page content -->
-<main role="main" class="container">
-    {% block content %}{% endblock %}
-</main>
+    <header class="header">
+        <div class="header-content">
+            <h1 class="logo">JoyBox - сервис с браузерными играми</h1>
+            <div class="auth-buttons">
+                {% if current_user.is_authenticated %}
+                    <a class="user-profile" href="/logout">{{ current_user.name }} {{ current_user.surname }}</a>
+                {% else %}
+                    <a class="btn btn-primary" href="/register">Зарегистрироваться</a>
+                    <a class="btn btn-success" href="/login">Войти</a>
+                {% endif %}
+            </div>
+        </div>
+        <h4 class="subheader">Авторизуйся для старта игр</h4>
+    </header>
+
+    <main class="main-content">
+        {% block content %}{% endblock %}
+    </main>
 </body>
 </html>
