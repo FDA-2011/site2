@@ -44,6 +44,10 @@ def login():
 @app.route("/cards")
 def cards():
     return render_template("cards.html")
+
+@app.route("/aboutus")
+def cards():
+    return render_template("aboutus.html")
     
 @app.route("/")
 def index():
