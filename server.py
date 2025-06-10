@@ -41,7 +41,10 @@ def login():
                                form=form)
     return render_template('login.html', form=form)
 
-
+@app.route("/cards")
+def cards():
+    return render_template("cards.html")
+    
 @app.route("/")
 def index():
     return render_template("index.html")
