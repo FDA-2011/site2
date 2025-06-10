@@ -12,7 +12,7 @@
 <body>
     <header class="header">
         <div class="header-content">
-            <h1 class="logo">JoyBox - сервис с браузерными играми</h1>
+            <h1>JoyBox - сервис с браузерными играми</h1>
             <div class="auth-buttons">
                 {% if current_user.is_authenticated %}
                     <a class="user-profile" href="/logout">{{ current_user.name }} {{ current_user.surname }}</a>
