@@ -16,8 +16,8 @@
                 {% if current_user.is_authenticated %}
                     <a class="user-profile" href="/logout">{{ current_user.name }} {{ current_user.surname }}</a>
                 {% else %}
-                    <a href="/register"><img src="https://vk.com/photo-230335773_457239062"></a>
-                    <a href="/login"><img src="https://vk.com/photo-230335773_457239072"></a>
+                    <a href="/register" class =  "btn" ><img src="https://vk.com/photo-230335773_457239062"></a>
+                    <a href="/login" class =  "btn" ><img src="https://vk.com/photo-230335773_457239072"></a>
                 {% endif %}
             </div>
         </div>
