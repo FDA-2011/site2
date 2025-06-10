@@ -391,6 +391,24 @@
                 logElement.scrollTop = logElement.scrollHeight;
             },
             
+            // Пополнение карт игрока
+            refillPlayerHand: function() {
+                while (this.playerHand.length < 3) {
+                    const newCard = this.drawCards(1)[0];
+                    this.playerHand.push(newCard);
+                    this.logAction(`Игрок получает новую карту: ${newCard.name}`);
+                }
+            },
+            
+            // Пополнение карт злоумышленника (без сообщения о конкретной карте)
+            refillEnemyHand: function() {
+                while (this.enemyHand.length < 3) {
+                    const newCard = this.drawCards(1)[0];
+                    this.enemyHand.push(newCard);
+                    this.logAction(`Злоумышленник получает новую карту`);
+                }
+            },
+            
             // Ход игрока
             playerPlayCard: function(cardIndex) {
                 if (!this.isPlayerTurn || this.gameOver) return;
@@ -421,12 +439,8 @@
                 this.checkGameOver();
                 if (this.gameOver) return;
                 
-                // Восполняем карту
-                if (this.playerHand.length < 3) {
-                    const newCard = this.drawCards(1)[0];
-                    this.playerHand.push(newCard);
-                    this.logAction(`Игрок получает новую карту: ${newCard.name}`);
-                }
+                // Пополняем карты игрока
+                this.refillPlayerHand();
                 
                 // Передаем ход злоумышленнику, если не пропускаем
                 if (!this.playerSkipTurn) {
@@ -495,12 +509,8 @@
                     this.checkGameOver();
                     if (this.gameOver) return;
                     
-                    // Восполняем карту
-                    if (this.enemyHand.length < 3) {
-                        const newCard = this.drawCards(1)[0];
-                        this.enemyHand.push(newCard);
-                        this.logAction(`Злоумышленник получает новую карту: ${newCard.name}`);
-                    }
+                    // Пополняем карты злоумышленника
+                    this.refillEnemyHand();
                 }
                 
                 // Передаем ход игроку
