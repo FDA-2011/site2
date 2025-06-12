@@ -53,6 +53,10 @@ def cards():
 def pingpong():
     return render_template("pingpong.html")
 
+@app.route("/clicker")
+def pingpong():
+    return render_template("candy_clicker.html")
+
 @app.route("/")
 def index():
     return render_template("index.html")
