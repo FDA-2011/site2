@@ -23,21 +23,76 @@
             color: white;
             font-size: 30px;
         }
+        #rules {
+            position: absolute;
+            bottom: 20px;
+            width: 100%;
+            text-align: center;
+            color: white;
+            font-size: 16px;
+            padding: 10px;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+        #startScreen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 24px;
+        }
+        #startButton {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 20px;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
     </style>
 </head>
 <body>
     <div id="score">0 : 0</div>
+    <div id="rules">
+        Игрок 1: W (вверх), S (вниз) | Игрок 2: Стрелки ↑ ↓ | Первый до 5 очков побеждает!
+    </div>
     <canvas id="gameCanvas"></canvas>
+
+    <div id="startScreen">
+        <h1>Пинг-Понг</h1>
+        <h2>Правила игры:</h2>
+        <p>1. Играют два игрока</p>
+        <p>2. Игрок 1 управляет левой ракеткой (клавиши W и S)</p>
+        <p>3. Игрок 2 управляет правой ракеткой (стрелки вверх и вниз)</p>
+        <p>4. Отбивайте мяч ракеткой, не дайте ему пролететь мимо</p>
+        <p>5. За каждое пропущенное соперником очко вы получаете 1 балл</p>
+        <p>6. Игра идет до 5 очков</p>
+        <p>7. Мяч ускоряется после каждого удара</p>
+        <button id="startButton">Начать игру</button>
+    </div>
 
     <script>
         // Получаем ссылку на canvas и его контекст для рисования
         const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d');
         const scoreElement = document.getElementById('score');
+        const startScreen = document.getElementById('startScreen');
+        const startButton = document.getElementById('startButton');
 
         // Устанавливаем размеры canvas равные размеру окна браузера
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
+
+        // Флаг, указывающий, идет ли игра
+        let gameRunning = false;
 
         // Настройки игры
         const game = {
@@ -46,6 +101,10 @@
                 player1: 0,
                 player2: 0
             },
+            // Победитель (null - нет победителя)
+            winner: null,
+            // Максимальное количество очков для победы
+            maxScore: 5,
             // Скорость увеличения мяча (для усложнения со временем)
             ballSpeedIncrease: 0.2,
             // Максимальная скорость мяча
@@ -55,7 +114,8 @@
                 background: '#000',
                 paddle: '#fff',
                 ball: '#fff',
-                divider: 'rgba(255, 255, 255, 0.2)'
+                divider: 'rgba(255, 255, 255, 0.2)',
+                winnerText: '#FFD700'
             }
         };
 
@@ -76,6 +136,8 @@
             },
             // Метод для обновления позиции мяча
             update: function() {
+                if (!gameRunning) return;
+                
                 this.x += this.speedX;
                 this.y += this.speedY;
                 
@@ -88,12 +150,14 @@
                 if (this.x - this.radius < 0) {
                     game.score.player2++;
                     this.reset();
+                    checkWinner();
                 }
                 
                 // Столкновение с правой границей (гол игроку 1)
                 if (this.x + this.radius > canvas.width) {
                     game.score.player1++;
                     this.reset();
+                    checkWinner();
                 }
                 
                 // Столкновение с ракеткой игрока 1
@@ -151,7 +215,7 @@
             x: 20,                             // Позиция X
             y: canvas.height / 2 - 50,         // Позиция Y (центр по вертикали)
             width: 10,                         // Ширина ракетки
-            height: 100,                        // Высота ракетки
+            height: 100,                       // Высота ракетки
             speed: 8,                          // Скорость перемещения
             upPressed: false,                   // Флаг нажатия клавиши вверх
             downPressed: false,                 // Флаг нажатия клавиши вниз
@@ -165,6 +229,8 @@
             },
             // Метод для обновления позиции ракетки
             update: function() {
+                if (!gameRunning) return;
+                
                 // Движение вверх, если нажата клавиша и не вышли за границы
                 if (this.upPressed && this.y > 0) {
                     this.y -= this.speed;
@@ -195,6 +261,8 @@
             },
             // Метод для обновления позиции ракетки
             update: function() {
+                if (!gameRunning) return;
+                
                 // Движение вверх, если нажата клавиша и не вышли за границы
                 if (this.upPressed && this.y > 0) {
                     this.y -= this.speed;
@@ -205,6 +273,41 @@
                 }
             }
         };
+
+        // Функция для проверки победителя
+        function checkWinner() {
+            if (game.score.player1 >= game.maxScore) {
+                game.winner = 'Игрок 1';
+                gameRunning = false;
+                showWinner();
+            } else if (game.score.player2 >= game.maxScore) {
+                game.winner = 'Игрок 2';
+                gameRunning = false;
+                showWinner();
+            }
+        }
+
+        // Функция для отображения победителя
+        function showWinner() {
+            ctx.font = '48px Arial';
+            ctx.fillStyle = game.colors.winnerText;
+            ctx.textAlign = 'center';
+            ctx.fillText(`${game.winner} побеждает!`, canvas.width / 2, canvas.height / 2);
+            ctx.font = '24px Arial';
+            ctx.fillText('Нажмите пробел для новой игры', canvas.width / 2, canvas.height / 2 + 50);
+        }
+
+        // Функция для сброса игры
+        function resetGame() {
+            game.score.player1 = 0;
+            game.score.player2 = 0;
+            game.winner = null;
+            scoreElement.textContent = '0 : 0';
+            ball.reset();
+            player1.y = canvas.height / 2 - 50;
+            player2.y = canvas.height / 2 - 50;
+            gameRunning = true;
+        }
 
         // Функция для рисования разделительной линии посередине поля
         function drawDivider() {
@@ -235,6 +338,11 @@
             // Рисуем и обновляем мяч
             ball.draw();
             ball.update();
+            
+            // Если есть победитель, отображаем сообщение
+            if (game.winner) {
+                showWinner();
+            }
         }
 
         // Обработчики нажатия клавиш
@@ -251,6 +359,11 @@
                 player2.upPressed = true;
             } else if (e.key === 'ArrowDown') {
                 player2.downPressed = true;
+            }
+            
+            // Пробел для начала новой игры после победы
+            if (e.key === ' ' && game.winner) {
+                resetGame();
             }
         }
 
@@ -282,6 +395,12 @@
             // Корректируем позицию мяча
             if (ball.reset) ball.reset();
         }
+
+        // Обработчик нажатия кнопки "Начать игру"
+        startButton.addEventListener('click', function() {
+            startScreen.style.display = 'none';
+            gameRunning = true;
+        });
 
         // Назначаем обработчики событий
         document.addEventListener('keydown', keyDownHandler);
