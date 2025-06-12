@@ -46,11 +46,11 @@ def cards():
     return render_template("cards.html")
 
 @app.route("/haos")
-def cards():
+def haos():
     return render_template("haos.html")
     
 @app.route("/aboutus")
-def cards():
+def aboutus():
     return render_template("aboutus.html")
 
 @app.route("/pingpong")
@@ -58,7 +58,7 @@ def pingpong():
     return render_template("pingpong.html")
 
 @app.route("/clicker")
-def pingpong():
+def clicker():
     return render_template("candy_clicker.html")
 
 @app.route("/")
