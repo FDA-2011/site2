@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Candy Clicker</title>
+    <style>
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            text-align: center;
+            background-color: #fff0f5;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+        
+        #game-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #f8f8f8;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+            border: 3px solid #ff69b4;
+        }
+        
+        h1, h2, h3 {
+            color: #ff69b4;
+            text-shadow: 1px 1px 1px rgba(0,0,0,0.1);
+        }
+        
+        #candy {
+            width: 200px;
+            height: 200px;
+            cursor: pointer;
+            transition: transform 0.1s;
+            margin: 20px auto;
+        }
+        
+        #candy:active {
+            transform: scale(0.95);
+        }
+        
+        #stats {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        
+        .stat {
+            background-color: #e8f8f5;
+            padding: 15px;
+            border-radius: 10px;
+            min-width: 150px;
+            margin: 5px;
+            border: 2px solid #2ecc71;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        #upgrades, #skins {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .upgrade, .skin {
+            background-color: #ffebee;
+            padding: 15px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+            width: 180px;
+            border: 2px solid #ff69b4;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .upgrade:hover, .skin:hover {
+            background-color: #ffd6e0;
+            transform: translateY(-3px);
+        }
+        
+        .upgrade:disabled, .skin:disabled {
+            background-color: #f0f0f0;
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+        
+        .price {
+            color: #2ecc71;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+        
+        .animate {
+            animation: clickAnimation 0.3s;
+        }
+        
+        @keyframes clickAnimation {
+            0% { transform: scale(1); }
+            50% { transform: scale(0.9); }
+            100% { transform: scale(1); }
+        }
+        
+        #cookies {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #ff69b4;
+        }
+        
+        .owned {
+            background-color: #e8f8f5;
+            border-color: #2ecc71;
+        }
+    </style>
+</head>
+<body>
+    <div id="game-container">
+        <h1>🍬 Candy Clicker 🍭</h1>
+        
+        <div id="stats">
+            <div class="stat">
+                <h3>Конфеты</h3>
+                <p id="cookies">0</p>
+            </div>
+            <div class="stat">
+                <h3>За клик</h3>
+                <p id="per-click">1</p>
+            </div>
+            <div class="stat">
+                <h3>Per Second</h3>
+                <p id="per-second">0</p>
+            </div>
+        </div>
+        
+        <img id="candy" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcST8avWw4_uA0mkn7c1ZNn3b5L3KhNGugmTuA&s" alt="Конфета">
+        
+        <div id="upgrades">
+            <h2>🍬 Прокачка конфет🍬</h2>
+            <div class="upgrade" onclick="buyUpgrade('click', 10, 1)">
+                <h3>🍭 Леденец</h3>
+	<p>+1 конфета за клик</p>
+                <p class="price">Цена: 10 конфет</p>
+            </div>
+       
+            <div class="upgrade" onclick="buyUpgrade('click', 40, 5)">
+                <h3>🍫 Шоколад</h3>
+                <p>+5 конфет за клик</p>
+                <p class="price">Price: 100 candies</p>
+          </div>
+            <div class="upgrade" onclick="buyUpgrade('click', 400, 15)">
+                <h3>🏭 Конфетная фабрика</h3>
+                <p>+ 50 конфет за клик</p>
+                <p class="price">Цена  : 400 конфет</p>
+            </div>
+            <div class="upgrade" onclick="buyUpgrade('click', 5000, 100)">
+                <h3>🏰 Конфетная крепость</h3>
+                <p>+100 конфет за клик</p>
+                <p class="price">Цена: 5000 конфет </p>
+            </div>
+            <div class="upgrade" onclick="buyUpgrade('click', 50000, 1000)">
+                <h3>🚀 Конфетная ракета</h3>
+                <p>+1000 конфет за клик</p>
+                <p class="price">Цена : 50000 конфет</p>
+            </div>
+
+            <div class="upgrade" onclick="buyUpgrade('click', 230000, 5000)">
+                <h3>⛲ Шоколадный фонтан ⛲</h3>
+                <p>+5000 конфет за клик</p>
+                <p class="price">Цена : 230000 конфет</p>
+          </div>
+        </div>
+        
+        <div id="skins">
+            <h2>🎨 Скины 🎨</h2>
+            <div class="skin owned" onclick="buySkin('candy', '', 0)">
+                <h3>🍬 Базовая Конфета</h3>
+                <p>Обычная конфета</p>
+                <p class="price">Имеется</p>
+            </div>
+            <div class="skin" onclick="buySkin('Леденец', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSuaUzQVDOC2HqYkvTZVRxwNPKODLiEJA39pg&s', 5000)">
+                <h3>🍭 Леденец</h3>
+                <p>Сладкий и вкусный</p>
+                <p class="price">Цена: 5000 конфет </p>
+            </div>
+            <div class="skin" onclick="buySkin('Шоколадная плитка', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS8tPaTB2LK7lUKdLtArmSpwNla7UESAKku1Q&s', 200000)">
+                <h3>🍫 Шоколад</h3>
+                <p>Вкус детства</p>
+                <p class="price">Цена: 200000 конфет</p>
+            </div>
+            <div class="skin" onclick="buySkin('Желейный мишка', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTC3a8jlN6Kk-01aYWMXnvrTmWNfB2ciwOB7w&s', 1000000)">
+                <h3>🐻 Желейный медведь</h3>
+                <p>Самый обычный желейный медведь</p>
+                <p class="price">Цена: 1000000 конфет</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Game state
+        let cookies = 0;
+        let cookiesPerClick = 1;
+        let cookiesPerSecond = 0;
+        const ownedSkins = ['candy'];
+        let currentSkin = 'candy';
+        
+        // DOM elements
+        const candyElement = document.getElementById('candy');
+        const cookiesDisplay = document.getElementById('cookies');
+        const perClickDisplay = document.getElementById('per-click');
+        const perSecondDisplay = document.getElementById('per-second');
+        
+        // Initialize the game
+        function init() {
+            updateDisplays();
+            setInterval(autoClick, 1000);
+            
+            candyElement.addEventListener('click', function() {
+                // Add animation class
+                this.classList.add('animate');
+                
+                // Remove animation class after animation completes
+                setTimeout(() => {
+                    this.classList.remove('animate');
+                }, 300);
+                
+                // Add cookies
+                addCookies(cookiesPerClick);
+            });
+        }
+        
+        // Update all displays
+        function updateDisplays() {
+            cookiesDisplay.textContent = Math.floor(cookies);
+perClickDisplay.textContent = cookiesPerClick;
+            perSecondDisplay.textContent = cookiesPerSecond;
+            
+            // Update upgrade buttons
+            document.querySelectorAll('.upgrade').forEach(upgrade => {
+                const price = parseInt(upgrade.querySelector('.price').textContent.match(/\d+/)[0]);
+                upgrade.disabled = cookies < price;
+            });
+            
+            // Update skin buttons
+            document.querySelectorAll('.skin').forEach(skin => {
+                const priceText = skin.querySelector('.price').textContent;
+                const priceMatch = priceText.match(/\d+/);
+                const price = priceMatch ? parseInt(priceMatch[0]) : 0;
+                const skinName = skin.getAttribute('onclick').match(/'([^']+)'/)[1];
+                
+                if (ownedSkins.includes(skinName)) {
+                    skin.classList.add('owned');
+                    skin.querySelector('.price').textContent = 'Owned';
+                    skin.disabled = false;
+                } else {
+                    skin.classList.remove('owned');
+                    skin.disabled = cookies < price;
+                }
+            });
+        }
+        
+        // Add cookies to the total
+        function addCookies(amount) {
+            cookies += amount;
+            updateDisplays();
+        }
+        
+        // Auto-clicker function
+        function autoClick() {
+            if (cookiesPerSecond > 0) {
+                addCookies(cookiesPerSecond / 10); // Divided by 10 because we call it 10 times per second
+            }
+        }
+        
+        // Buy an upgrade
+        function buyUpgrade(type, price, amount) {
+            if (cookies >= price) {
+                cookies -= price;
+                
+                if (type === 'click') {
+                    cookiesPerClick += amount;
+                } else if (type === 'auto') {
+                    cookiesPerSecond += amount;
+                }
+                
+                updateDisplays();
+            }
+        }
+        
+        // Buy a skin
+        function buySkin(skinName, imageUrl, price) {
+            // If already owned, just equip it
+            if (ownedSkins.includes(skinName)) {
+                currentSkin = skinName;
+                candyElement.src = imageUrl;
+                return;
+            }
+            
+            // Otherwise try to buy it
+            if (cookies >= price) {
+                cookies -= price;
+                ownedSkins.push(skinName);
+                currentSkin = skinName;
+                candyElement.src = imageUrl;
+                updateDisplays();
+            }
+        }
+        
+        // Start the game
+        init();
+    </script>
+</body>
+</html>
