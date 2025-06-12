@@ -50,7 +50,7 @@ def cards():
     return render_template("aboutus.html")
 
 @app.route("/pingpong")
-def aboutus():
+def pingpong():
     return render_template("pingpong.html")
 
 @app.route("/")
