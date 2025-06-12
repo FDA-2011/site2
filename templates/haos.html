@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Бизнес-Хаос</title>
+    <link rel="stylesheet" href="styleHaos.css">
+</head>
+<body>
+    <div class="game-container">
+        <h1>🤑 Бизнес-Хаос</h1>
+        
+        <div class="stats">
+            <div>💰 Капитал: <span id="money">10000</span> ₽</div>
+            <div>📈 Доход/месяц: <span id="income">0</span> ₽</div>
+            <div>📅 Месяц: <span id="month">1</span></div>
+        </div>
+
+        <div class="businesses">
+            <h2>Ваши активы:</h2>
+            <div id="assets"></div>
+        </div>
+
+        <div class="actions">
+            <h2>Инвестиции:</h2>
+            <button onclick="buyBusiness('Лавка', 5000, 500)">🏪 Купить лавку (5000 ₽ | +500/мес)</button>
+            <button onclick="buyBusiness('Завод', 20000, 2000)">🏭 Купить завод (20000 ₽ | +2000/мес)</button>
+            <button onclick="buyCrypto()">🪙 Купить крипту (Риск x2!)</button>
+        </div>
+
+        <div class="event-log" id="event-log">
+            <p>Добро пожаловать в «Бизнес-Хаос»! Начните инвестировать.</p>
+        </div>
+
+        <button class="next-btn" onclick="nextMonth()">⏭️ Следующий месяц</button>
+    </div>
+
+    <script src="scriptHaos.js"></script>
+</body>
+</html>
