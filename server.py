@@ -48,7 +48,11 @@ def cards():
 @app.route("/aboutus")
 def cards():
     return render_template("aboutus.html")
-    
+
+@app.route("/pingpong")
+def aboutus():
+    return render_template("pingpong.html")
+
 @app.route("/")
 def index():
     return render_template("index.html")
