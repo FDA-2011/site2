@@ -45,6 +45,10 @@ def login():
 def cards():
     return render_template("cards.html")
 
+@app.route("/haos")
+def cards():
+    return render_template("haos.html")
+    
 @app.route("/aboutus")
 def cards():
     return render_template("aboutus.html")
