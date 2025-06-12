@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ping Pong Game</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background-color: #000;
+            font-family: Arial, sans-serif;
+        }
+        canvas {
+            display: block;
+            background-color: #000;
+        }
+        #score {
+            position: absolute;
+            top: 20px;
+            width: 100%;
+            text-align: center;
+            color: white;
+            font-size: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div id="score">0 : 0</div>
+    <canvas id="gameCanvas"></canvas>
+
+    <script>
+        // Получаем ссылку на canvas и его контекст для рисования
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const scoreElement = document.getElementById('score');
+
+        // Устанавливаем размеры canvas равные размеру окна браузера
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        // Настройки игры
+        const game = {
+            // Счет игроков
+            score: {
+                player1: 0,
+                player2: 0
+            },
+            // Скорость увеличения мяча (для усложнения со временем)
+            ballSpeedIncrease: 0.2,
+            // Максимальная скорость мяча
+            maxBallSpeed: 20,
+            // Цвета элементов игры
+            colors: {
+                background: '#000',
+                paddle: '#fff',
+                ball: '#fff',
+                divider: 'rgba(255, 255, 255, 0.2)'
+            }
+        };
+
+        // Параметры мяча
+        const ball = {
+            x: canvas.width / 2,     // Начальная позиция X (центр)
+            y: canvas.height / 2,    // Начальная позиция Y (центр)
+            radius: 10,             // Радиус мяча
+            speedX: 5,               // Скорость по горизонтали
+            speedY: 5,               // Скорость по вертикали
+            // Метод для отрисовки мяча
+            draw: function() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fillStyle = game.colors.ball;
+                ctx.fill();
+                ctx.closePath();
+            },
+            // Метод для обновления позиции мяча
+            update: function() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                
+                // Столкновение с верхней и нижней границей
+                if (this.y - this.radius < 0 || this.y + this.radius > canvas.height) {
+                    this.speedY = -this.speedY;
+                }
+                
+                // Столкновение с левой границей (гол игроку 2)
+                if (this.x - this.radius < 0) {
+                    game.score.player2++;
+                    this.reset();
+                }
+                
+                // Столкновение с правой границей (гол игроку 1)
+                if (this.x + this.radius > canvas.width) {
+                    game.score.player1++;
+                    this.reset();
+                }
+                
+                // Столкновение с ракеткой игрока 1
+                if (
+                    this.x - this.radius < player1.x + player1.width &&
+                    this.y > player1.y &&
+                    this.y < player1.y + player1.height
+                ) {
+                    // Увеличиваем скорость мяча после удара, но не больше максимума
+                    const speedIncrease = Math.min(
+                        Math.abs(this.speedX) + game.ballSpeedIncrease,
+                        game.maxBallSpeed
+                    );
+                    this.speedX = speedIncrease;
+                    
+                    // Изменяем угол отскока в зависимости от того, куда попали по ракетке
+                    const hitPosition = (this.y - (player1.y + player1.height / 2)) / (player1.height / 2);
+                    this.speedY = hitPosition * 5;
+                }
+                
+                // Столкновение с ракеткой игрока 2
+                if (
+                    this.x + this.radius > player2.x &&
+                    this.y > player2.y &&
+                    this.y < player2.y + player2.height
+                ) {
+                    // Увеличиваем скорость мяча после удара, но не больше максимума
+                    const speedIncrease = Math.min(
+                        Math.abs(this.speedX) + game.ballSpeedIncrease,
+                        game.maxBallSpeed
+                    );
+                    this.speedX = -speedIncrease;
+                    
+                    // Изменяем угол отскока в зависимости от того, куда попали по ракетке
+                    const hitPosition = (this.y - (player2.y + player2.height / 2)) / (player2.height / 2);
+                    this.speedY = hitPosition * 5;
+                }
+            },
+            // Сброс мяча в центр после гола
+            reset: function() {
+                this.x = canvas.width / 2;
+                this.y = canvas.height / 2;
+                
+                // Рандомный начальный угол
+                this.speedX = 5 * (Math.random() > 0.5 ? 1 : -1);
+                this.speedY = 5 * (Math.random() * 2 - 1);
+                
+                // Обновляем счет на экране
+                scoreElement.textContent = `${game.score.player1} : ${game.score.player2}`;
+            }
+        };
+
+        // Параметры игрока 1 (левая ракетка)
+        const player1 = {
+            x: 20,                             // Позиция X
+            y: canvas.height / 2 - 50,         // Позиция Y (центр по вертикали)
+            width: 10,                         // Ширина ракетки
+            height: 100,                        // Высота ракетки
+            speed: 8,                          // Скорость перемещения
+            upPressed: false,                   // Флаг нажатия клавиши вверх
+            downPressed: false,                 // Флаг нажатия клавиши вниз
+            // Метод для отрисовки ракетки
+            draw: function() {
+                ctx.beginPath();
+                ctx.rect(this.x, this.y, this.width, this.height);
+                ctx.fillStyle = game.colors.paddle;
+                ctx.fill();
+                ctx.closePath();
+            },
+            // Метод для обновления позиции ракетки
+            update: function() {
+                // Движение вверх, если нажата клавиша и не вышли за границы
+                if (this.upPressed && this.y > 0) {
+                    this.y -= this.speed;
+                }
+                // Движение вниз, если нажата клавиша и не вышли за границы
+                if (this.downPressed && this.y + this.height < canvas.height) {
+                    this.y += this.speed;
+                }
+            }
+        };
+
+        // Параметры игрока 2 (правая ракетка)
+        const player2 = {
+            x: canvas.width - 30,              // Позиция X (отступ от правого края)
+            y: canvas.height / 2 - 50,         // Позиция Y (центр по вертикали)
+            width: 10,                         // Ширина ракетки
+            height: 100,                       // Высота ракетки
+            speed: 8,                          // Скорость перемещения
+            upPressed: false,                   // Флаг нажатия клавиши вверх
+            downPressed: false,                 // Флаг нажатия клавиши вниз
+            // Метод для отрисовки ракетки
+            draw: function() {
+                ctx.beginPath();
+                ctx.rect(this.x, this.y, this.width, this.height);
+                ctx.fillStyle = game.colors.paddle;
+                ctx.fill();
+                ctx.closePath();
+            },
+            // Метод для обновления позиции ракетки
+            update: function() {
+                // Движение вверх, если нажата клавиша и не вышли за границы
+                if (this.upPressed && this.y > 0) {
+                    this.y -= this.speed;
+                }
+                // Движение вниз, если нажата клавиша и не вышли за границы
+                if (this.downPressed && this.y + this.height < canvas.height) {
+                    this.y += this.speed;
+                }
+            }
+        };
+
+        // Функция для рисования разделительной линии посередине поля
+        function drawDivider() {
+            ctx.beginPath();
+            ctx.setLineDash([10, 10]);  // Пунктирная линия
+            ctx.moveTo(canvas.width / 2, 0);
+            ctx.lineTo(canvas.width / 2, canvas.height);
+            ctx.strokeStyle = game.colors.divider;
+            ctx.lineWidth = 2;
+            ctx.stroke();
+            ctx.setLineDash([]);  // Сброс пунктира
+        }
+
+        // Функция отрисовки всего игрового поля
+        function draw() {
+            // Очищаем canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Рисуем разделительную линию
+            drawDivider();
+            
+            // Рисуем и обновляем ракетки
+            player1.draw();
+            player1.update();
+            player2.draw();
+            player2.update();
+            
+            // Рисуем и обновляем мяч
+            ball.draw();
+            ball.update();
+        }
+
+        // Обработчики нажатия клавиш
+        function keyDownHandler(e) {
+            // Игрок 1: W - вверх, S - вниз
+            if (e.key === 'w' || e.key === 'W') {
+                player1.upPressed = true;
+            } else if (e.key === 's' || e.key === 'S') {
+                player1.downPressed = true;
+            }
+            
+            // Игрок 2: стрелка вверх и стрелка вниз
+            if (e.key === 'ArrowUp') {
+                player2.upPressed = true;
+            } else if (e.key === 'ArrowDown') {
+                player2.downPressed = true;
+            }
+        }
+
+        // Обработчики отпускания клавиш
+        function keyUpHandler(e) {
+            // Игрок 1
+            if (e.key === 'w' || e.key === 'W') {
+                player1.upPressed = false;
+            } else if (e.key === 's' || e.key === 'S') {
+                player1.downPressed = false;
+            }
+            
+            // Игрок 2
+            if (e.key === 'ArrowUp') {
+                player2.upPressed = false;
+            } else if (e.key === 'ArrowDown') {
+                player2.downPressed = false;
+            }
+        }
+
+        // Обработчик изменения размера окна
+        function resizeHandler() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            
+            // Корректируем позицию правой ракетки
+            player2.x = canvas.width - 30;
+            
+            // Корректируем позицию мяча
+            if (ball.reset) ball.reset();
+        }
+
+        // Назначаем обработчики событий
+        document.addEventListener('keydown', keyDownHandler);
+        document.addEventListener('keyup', keyUpHandler);
+        window.addEventListener('resize', resizeHandler);
+
+        // Запускаем игровой цикл (60 кадров в секунду)
+        setInterval(draw, 1000 / 60);
+    </script>
+</body>
+</html>
