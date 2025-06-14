@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Candy Clicker</title>
+    <title>Candy Clicker Deluxe</title>
     <style>
         body {
             font-family: 'Comic Sans MS', cursive, sans-serif;
@@ -12,6 +12,7 @@
             margin: 0;
             padding: 20px;
             color: #333;
+            overflow-x: hidden;
         }
         
         #game-container {
@@ -22,6 +23,7 @@
             border-radius: 15px;
             box-shadow: 0 0 15px rgba(0,0,0,0.1);
             border: 3px solid #ff69b4;
+            position: relative;
         }
         
         h1, h2, h3 {
@@ -35,6 +37,8 @@
             cursor: pointer;
             transition: transform 0.1s;
             margin: 20px auto;
+            position: relative;
+            z-index: 10;
         }
         
         #candy:active {
@@ -114,11 +118,35 @@
             background-color: #e8f8f5;
             border-color: #2ecc71;
         }
+        
+        .candy-particle {
+            position: absolute;
+            pointer-events: none;
+            z-index: 5;
+            animation: float-up 1s forwards;
+            user-select: none;
+            width: 40px;
+            height: 40px;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+        
+        @keyframes float-up {
+            0% {
+                transform: translate(0, 0) rotate(0deg) scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(var(--tx), var(--ty)) rotate(360deg) scale(0.5);
+                opacity: 0;
+            }
+        }
     </style>
 </head>
 <body>
     <div id="game-container">
-        <h1>🍬 Candy Clicker 🍭</h1>
+        <h1>🍬 Candy Clicker Deluxe 🍭</h1>
         
         <div id="stats">
             <div class="stat">
@@ -129,10 +157,6 @@
                 <h3>За клик</h3>
                 <p id="per-click">1</p>
             </div>
-            <div class="stat">
-                <h3>В секунду(будет позже)</h3>
-                <p id="per-second">0</p>
-            </div>
         </div>
         
         <img id="candy" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcST8avWw4_uA0mkn7c1ZNn3b5L3KhNGugmTuA&s" alt="Конфета">
@@ -141,87 +165,96 @@
             <h2>🍬 Прокачка конфет🍬</h2>
             <div class="upgrade" onclick="buyUpgrade('click', 10, 1)">
                 <h3>🍭 Леденец</h3>
-	<p>+1 конфета за клик</p>
+                <p>+1 конфета за клик</p>
                 <p class="price">Цена: 10 конфет</p>
             </div>
        
             <div class="upgrade" onclick="buyUpgrade('click', 40, 5)">
                 <h3>🍫 Шоколад</h3>
                 <p>+5 конфет за клик</p>
-                <p class="price">Цена: 40 конфет </p>
-          </div>
-            <div class="upgrade" onclick="buyUpgrade('click', 400, 15)">
-                <h3>🏭 Конфетная фабрика</h3>
-                <p>+ 50 конфет за клик</p>
-                <p class="price">Цена  : 400 конфет</p>
+                <p class="price">Цена: 40 конфет</p>
             </div>
+            
+            <div class="upgrade" onclick="buyUpgrade('click', 400, 50)">
+                <h3>🏭 Конфетная фабрика</h3>
+                <p>+50 конфет за клик</p>
+                <p class="price">Цена: 400 конфет</p>
+            </div>
+            
             <div class="upgrade" onclick="buyUpgrade('click', 5000, 100)">
                 <h3>🏰 Конфетная крепость</h3>
                 <p>+100 конфет за клик</p>
-                <p class="price">Цена: 5000 конфет </p>
+                <p class="price">Цена: 5000 конфет</p>
             </div>
+            
             <div class="upgrade" onclick="buyUpgrade('click', 50000, 1000)">
                 <h3>🚀 Конфетная ракета</h3>
                 <p>+1000 конфет за клик</p>
-                <p class="price">Цена : 50000 конфет</p>
+                <p class="price">Цена: 50000 конфет</p>
             </div>
 
             <div class="upgrade" onclick="buyUpgrade('click', 230000, 5000)">
                 <h3>⛲ Шоколадный фонтан ⛲</h3>
                 <p>+5000 конфет за клик</p>
-                <p class="price">Цена : 230000 конфет</p>
-          </div>
-		 <div class="upgrade" onclick="buyUpgrade('click', 1000000, 15000)">
-                <h3>💂🏼‍♂️Конфетная Империя💂🏼‍♂️</h3>
-                <p> +15000 конфет за клик</p>
-                <p class="price">Цена  : 1000000 конфет</p>
+                <p class="price">Цена: 230000 конфет</p>
             </div>
-		<div class="upgrade" onclick="buyUpgrade('click', 10000000, 100000)">
-                <h3>👑Конфетный король👑</h3>
-                <p> +100000 конфет за клик</p>
-                <p class="price">Цена  : 10000000 конфет</p>
+            
+            <div class="upgrade" onclick="buyUpgrade('click', 1000000, 15000)">
+                <h3>💂🏼‍♂️ Конфетная Империя</h3>
+                <p>+15000 конфет за клик</p>
+                <p class="price">Цена: 1000000 конфет</p>
             </div>
-		<div class="upgrade" onclick="buyUpgrade('click', 1000000000, 10000000)">
-                <h3>👸🏻Конфетная королева👸🏻</h3>
-                <p> +15000000 конфет за клик</p>
-                <p class="price">Цена  : 1000000000 конфет</p>
+            
+            <div class="upgrade" onclick="buyUpgrade('click', 10000000, 100000)">
+                <h3>👑 Конфетный король</h3>
+                <p>+100000 конфет за клик</p>
+                <p class="price">Цена: 10000000 конфет</p>
+            </div>
+            
+            <div class="upgrade" onclick="buyUpgrade('click', 1000000000, 15000000)">
+                <h3>👸🏻 Конфетная королева</h3>
+                <p>+15000000 конфет за клик</p>
+                <p class="price">Цена: 1000000000 конфет</p>
             </div>
         </div>
         
         <div id="skins">
             <h2>🎨 Скины 🎨</h2>
-            <div class="skin owned" onclick="buySkin('candy', '', 0)">
+            <div class="skin owned" onclick="buySkin('candy', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcST8avWw4_uA0mkn7c1ZNn3b5L3KhNGugmTuA&s', 0)">
                 <h3>🍬 Базовая Конфета</h3>
                 <p>Обычная конфета</p>
                 <p class="price">Имеется</p>
             </div>
+            
             <div class="skin" onclick="buySkin('Леденец', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSuaUzQVDOC2HqYkvTZVRxwNPKODLiEJA39pg&s', 5000)">
                 <h3>🍭 Леденец</h3>
                 <p>Сладкий и вкусный</p>
-                <p class="price">Цена: 5000 конфет </p>
+                <p class="price">Цена: 5000 конфет</p>
             </div>
+            
             <div class="skin" onclick="buySkin('Шоколадная плитка', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS8tPaTB2LK7lUKdLtArmSpwNla7UESAKku1Q&s', 200000)">
                 <h3>🍫 Шоколад</h3>
                 <p>Вкус детства</p>
                 <p class="price">Цена: 200000 конфет</p>
             </div>
+            
             <div class="skin" onclick="buySkin('Желейный мишка', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTC3a8jlN6Kk-01aYWMXnvrTmWNfB2ciwOB7w&s', 1000000)">
                 <h3>🐻 Желейный медведь</h3>
                 <p>Самый обычный желейный медведь</p>
                 <p class="price">Цена: 1000000 конфет</p>
             </div>
-		<div class="skin" onclick="buySkin('Огурец', 'https://main-cdn.sbermegamarket.ru/big2/hlr-system/-21/408/073/304/261/38/100050923594b0.jpg', 1000000000)">
-                <h3>🥒Огурец Григорий🥒</h3>
+            
+            <div class="skin" onclick="buySkin('Огурец', 'https://main-cdn.sbermegamarket.ru/big2/hlr-system/-21/408/073/304/261/38/100050923594b0.jpg', 1000000000)">
+                <h3>🥒 Огурец Григорий</h3>
                 <p>Самый обычный огурец. Григорий</p>
                 <p class="price">Цена: 1000000000 конфет</p>
             </div>
-	    </div>
-		<div class="skin" onclick="buySkin('Пiструн', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcShN6eL6wd43OhvAnJ-HTkgq9wPJWa0i3IiOg&s', 1000000000000)">
+            
+            <div class="skin" onclick="buySkin('Пiструн', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcShN6eL6wd43OhvAnJ-HTkgq9wPJWa0i3IiOg&s', 1000000000000)">
                 <h3>Пiструн</h3>
                 <p>Пiструн миляшка</p>
                 <p class="price">Цена: 1000000000000 конфет</p>
             </div>
-	    </div>
         </div>
     </div>
 
@@ -229,40 +262,86 @@
         // Game state
         let cookies = 0;
         let cookiesPerClick = 1;
-        let cookiesPerSecond = 0;
         const ownedSkins = ['candy'];
         let currentSkin = 'candy';
+        let currentSkinImage = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcST8avWw4_uA0mkn7c1ZNn3b5L3KhNGugmTuA&s';
+        
+        // Соответствие скинов и изображений
+        const skinImages = {
+            'candy': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcST8avWw4_uA0mkn7c1ZNn3b5L3KhNGugmTuA&s',
+            'Леденец': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSuaUzQVDOC2HqYkvTZVRxwNPKODLiEJA39pg&s',
+            'Шоколадная плитка': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS8tPaTB2LK7lUKdLtArmSpwNla7UESAKku1Q&s',
+            'Желейный мишка': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTC3a8jlN6Kk-01aYWMXnvrTmWNfB2ciwOB7w&s',
+            'Огурец': 'https://main-cdn.sbermegamarket.ru/big2/hlr-system/-21/408/073/304/261/38/100050923594b0.jpg',
+            'Пiструн': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcShN6eL6wd43OhvAnJ-HTkgq9wPJWa0i3IiOg&s'
+        };
         
         // DOM elements
         const candyElement = document.getElementById('candy');
         const cookiesDisplay = document.getElementById('cookies');
         const perClickDisplay = document.getElementById('per-click');
-        const perSecondDisplay = document.getElementById('per-second');
         
         // Initialize the game
         function init() {
             updateDisplays();
-            setInterval(autoClick, 1000);
             
-            candyElement.addEventListener('click', function() {
-                // Add animation class
+            candyElement.addEventListener('click', function(e) {
+                // Add animation
                 this.classList.add('animate');
-                
-                // Remove animation class after animation completes
                 setTimeout(() => {
                     this.classList.remove('animate');
                 }, 300);
                 
                 // Add cookies
-                addCookies(cookiesPerClick);
+                cookies += cookiesPerClick;
+                updateDisplays();
+                
+                // Create candy particles
+                createParticles(e.clientX, e.clientY);
             });
+        }
+        
+        // Create flying candy particles
+        function createParticles(x, y) {
+            const particlesCount = Math.min(10 + Math.floor(cookiesPerClick / 5), 50); // Больше частиц
+            
+            for (let i = 0; i < particlesCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'candy-particle';
+                particle.style.backgroundImage = `url('${currentSkinImage}')`;
+                
+                // Random direction and distance
+                const angle = Math.random() * Math.PI * 2;
+                const distance = 50 + Math.random() * 150; // Большая дистанция
+                const tx = Math.cos(angle) * distance;
+                const ty = Math.sin(angle) * distance - 150; // Летят выше
+                
+                particle.style.setProperty('--tx', `${tx}px`);
+                particle.style.setProperty('--ty', `${ty}px`);
+                particle.style.left = `${x}px`;
+                particle.style.top = `${y}px`;
+                
+                // Random size and rotation
+                const size = 20 + Math.random() * 30;
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                
+                // Random delay for animation
+                particle.style.animationDelay = `${Math.random() * 0.2}s`;
+                
+                document.body.appendChild(particle);
+                
+                // Remove particle after animation
+                setTimeout(() => {
+                    particle.remove();
+                }, 1000);
+            }
         }
         
         // Update all displays
         function updateDisplays() {
             cookiesDisplay.textContent = Math.floor(cookies);
-perClickDisplay.textContent = cookiesPerClick;
-            perSecondDisplay.textContent = cookiesPerSecond;
+            perClickDisplay.textContent = cookiesPerClick;
             
             // Update upgrade buttons
             document.querySelectorAll('.upgrade').forEach(upgrade => {
@@ -279,7 +358,7 @@ perClickDisplay.textContent = cookiesPerClick;
                 
                 if (ownedSkins.includes(skinName)) {
                     skin.classList.add('owned');
-                    skin.querySelector('.price').textContent = 'Owned';
+                    skin.querySelector('.price').textContent = 'Имеется';
                     skin.disabled = false;
                 } else {
                     skin.classList.remove('owned');
@@ -288,30 +367,11 @@ perClickDisplay.textContent = cookiesPerClick;
             });
         }
         
-        // Add cookies to the total
-        function addCookies(amount) {
-            cookies += amount;
-            updateDisplays();
-        }
-        
-        // Auto-clicker function
-        function autoClick() {
-            if (cookiesPerSecond > 0) {
-                addCookies(cookiesPerSecond / 10); // Divided by 10 because we call it 10 times per second
-            }
-        }
-        
         // Buy an upgrade
         function buyUpgrade(type, price, amount) {
             if (cookies >= price) {
                 cookies -= price;
-                
-                if (type === 'click') {
-                    cookiesPerClick += amount;
-                } else if (type === 'auto') {
-                    cookiesPerSecond += amount;
-                }
-                
+                cookiesPerClick += amount;
                 updateDisplays();
             }
         }
@@ -321,6 +381,7 @@ perClickDisplay.textContent = cookiesPerClick;
             // If already owned, just equip it
             if (ownedSkins.includes(skinName)) {
                 currentSkin = skinName;
+                currentSkinImage = skinImages[skinName] || skinImages['candy'];
                 candyElement.src = imageUrl;
                 return;
             }
@@ -330,6 +391,7 @@ perClickDisplay.textContent = cookiesPerClick;
                 cookies -= price;
                 ownedSkins.push(skinName);
                 currentSkin = skinName;
+                currentSkinImage = skinImages[skinName] || skinImages['candy'];
                 candyElement.src = imageUrl;
                 updateDisplays();
             }
