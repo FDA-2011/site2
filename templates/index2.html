@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block content %}
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+<center>
+<div class="main-content">
+    <div class="registration-card">
+        <h2 class="registration-title">Список игр</h2>
+        
+        {% if current_user.is_authenticated %}
+        <div style="text-align: center; margin-top: 20px;">
+            <a href="/indexgame1" class="btn btn-primary" style="display: inline-block; padding: 12px 24px; font-size: 16px;">
+                Игра Пирамидка
+            </a>
+        </div>
+        <div style="text-align: center; margin-top: 20px;">
+            <a href="/cards" class="btn btn-primary" style="display: inline-block; padding: 12px 24px; font-size: 16px;">
+                Финансовый поединок
+            </a>
+        </div>
+        <div style="text-align: center; margin-top: 20px;">
+            <a href="/pingpong" class="btn btn-primary" style="display: inline-block; padding: 12px 24px; font-size: 16px;">
+                Пинг-понг
+            </a>
+        </div>
+        <div style="text-align: center; margin-top: 20px;">
+            <a href="/clicker" class="btn btn-primary" style="display: inline-block; padding: 12px 24px; font-size: 16px;">
+                Сладкий Кликер
+            </a>
+        </div>
+        <div style="text-align: center; margin-top: 20px;">
+            <a href="/haos" class="btn btn-primary" style="display: inline-block; padding: 12px 24px; font-size: 16px;">
+            Бизнес - Хаос
+            </a>
+        </div>
+        {% else %}
+        <div class="login-link" style="margin-top: 30px;">
+            <p>Для доступа к играм необходимо <a href="/login">войти</a></p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+    </center>
+{% endblock %}
