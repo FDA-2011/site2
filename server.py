@@ -4,8 +4,8 @@ from flask_login import LoginManager, login_user, logout_user, login_required, c
 from data import db_session
 from data.users import User
 
-from forms.login import LoginForm
-from forms.register import RegisterForm
+from static.forms.login import LoginForm
+from static.forms.register import RegisterForm
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
@@ -63,16 +63,12 @@ def clicker():
 
 @app.route("/")
 def index():
-    return render_template("index2.html")
+    return render_template("index.html")
 
 
 @app.route("/indexgame1")
 def play():
     return render_template("indexgame.html")
-
-@app.route("/index")
-def play():
-    return render_template("index.html")
 
 
 @app.route('/register', methods=['GET', 'POST'])
