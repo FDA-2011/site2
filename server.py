@@ -63,12 +63,16 @@ def clicker():
 
 @app.route("/")
 def index():
-    return render_template("index.html")
+    return render_template("index2.html")
 
 
 @app.route("/indexgame1")
 def play():
     return render_template("indexgame.html")
+
+@app.route("/index")
+def play():
+    return render_template("index.html")
 
 
 @app.route('/register', methods=['GET', 'POST'])
