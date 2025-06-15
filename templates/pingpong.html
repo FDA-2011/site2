@@ -106,9 +106,9 @@
             // Максимальное количество очков для победы
             maxScore: 5,
             // Скорость увеличения мяча (для усложнения со временем)
-            ballSpeedIncrease: 0.2,
+            ballSpeedIncrease: 0.5,  // Увеличено с 0.2 до 0.5
             // Максимальная скорость мяча
-            maxBallSpeed: 20,
+            maxBallSpeed: 25,  // Увеличено с 20 до 25
             // Цвета элементов игры
             colors: {
                 background: '#000',
@@ -124,8 +124,8 @@
             x: canvas.width / 2,     // Начальная позиция X (центр)
             y: canvas.height / 2,    // Начальная позиция Y (центр)
             radius: 10,             // Радиус мяча
-            speedX: 5,               // Скорость по горизонтали
-            speedY: 5,               // Скорость по вертикали
+            speedX: 8,               // Увеличено с 5 до 8
+            speedY: 8,               // Увеличено с 5 до 8
             // Метод для отрисовки мяча
             draw: function() {
                 ctx.beginPath();
@@ -202,14 +202,15 @@
                 this.y = canvas.height / 2;
                 
                 // Рандомный начальный угол
-                this.speedX = 5 * (Math.random() > 0.5 ? 1 : -1);
-                this.speedY = 5 * (Math.random() * 2 - 1);
+                this.speedX = 8 * (Math.random() > 0.5 ? 1 : -1);  // Увеличено с 5 до 8
+                this.speedY = 8 * (Math.random() * 2 - 1);         // Увеличено с 5 до 8
                 
                 // Обновляем счет на экране
                 scoreElement.textContent = `${game.score.player1} : ${game.score.player2}`;
             }
         };
 
+        // Остальной код остается без изменений...
         // Параметры игрока 1 (левая ракетка)
         const player1 = {
             x: 20,                             // Позиция X
